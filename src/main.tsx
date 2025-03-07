@@ -64,32 +64,36 @@ const App = function () {
   useEffect(() => {
     if (state.isPlaying) {
       intervalRef.current = setInterval(() => {
-        setState((prev) => {
-          const nextPosition = prev.globalPlayHeadPosition + (intervalMsRef.current / 1000);
+        setState((prevState) => {
+          const nextPosition = prevState.globalPlayHeadPosition + (intervalMsRef.current / 1000);
 
-          if (nextPosition >= prev.trackDuration) {
-            clearInterval(intervalRef.current!);
+          if (nextPosition >= prevState.trackDuration) {
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
 
-            intervalRef.current = null;
+              intervalRef.current = null;
+            }
 
-            prev.clipSlice.forEach((clip) => {
+            prevState.clipSlice.forEach((clip) => {
               clip.audio.pause();
+
               clip.audio.currentTime = 0;
             });
 
-            return { ...prev, globalPlayHeadPosition: 0.0, isPlaying: false };
+            return { ...prevState, globalPlayHeadPosition: 0.0, isPlaying: false };
           }
 
-          prev.clipSlice.forEach((clip) => {
+          prevState.clipSlice.forEach((clip) => {
             if (nextPosition >= clip.start && nextPosition <= clip.end) {
               clip.audio.play();
             } else {
               clip.audio.pause();
+
               clip.audio.currentTime = 0;
             }
           });
 
-          return { ...prev, globalPlayHeadPosition: nextPosition };
+          return { ...prevState, globalPlayHeadPosition: nextPosition };
         });
       }, intervalMsRef.current);
     } else {
@@ -101,6 +105,7 @@ const App = function () {
 
       state.clipSlice.forEach((clip) => {
         clip.audio.pause();
+
         clip.audio.currentTime = 0;
       });
     }
@@ -108,6 +113,7 @@ const App = function () {
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+
         intervalRef.current = null;
       }
     };
