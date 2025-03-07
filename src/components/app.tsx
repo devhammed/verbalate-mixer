@@ -113,7 +113,7 @@ export default function App() {
         {state.isPlaying ? 'Pause' : 'Play'}
       </button>
 
-      <input type="range" min="50" max="200" step="0.1" onChange={handleScaling} />
+      <input type="range" min="50" max="200" step="0.1" value={state.scale} onChange={handleScaling} />
 
       <div
         onClick={handleSeek}
