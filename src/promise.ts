@@ -56,7 +56,6 @@ class AsyncTaskQueue {
 
 const queue = new AsyncTaskQueue(2);
 
-// Task that resolves after 1000ms.
 const task1 = () =>
   new Promise((resolve) => {
     setTimeout(() => {
@@ -65,7 +64,6 @@ const task1 = () =>
     }, 2000);
   });
 
-// Task that resolves after 500ms.
 const task2 = () =>
   new Promise((resolve) => {
     setTimeout(() => {
