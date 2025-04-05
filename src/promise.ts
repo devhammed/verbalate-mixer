@@ -1,5 +1,5 @@
 class AsyncTaskQueue {
-  private queue: (() => Promise<unknown>)[] = [];
+  private queue: (() => Promise<void>)[] = [];
 
   private activeCount: number = 0;
 
